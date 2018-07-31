@@ -1,13 +1,19 @@
 {
   "name": "brio",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "Brio Server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Lucas Fontes Gaspareto <lucasfontesgaspareto@gmail.com>",
   "license": "ISC",
-  "devDependencies": {
+  "devDependencies": {},
+  "repository": "https://github.com/gustavoquinalha/brio.git",
+  "dependencies": {
+    "jsdom": "^11.12.0",
+    "request": "^2.87.0",
+    "wink-ner": "^1.0.1",
+    "wink-tokenizer": "^4.0.0"
   }
 }
