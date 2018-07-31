@@ -74,12 +74,14 @@ function getSelectionText() {
 }
 
 // listener for text selection and matching strings
+var timeout;
 document.addEventListener("selectionchange", e => {
   console.dir(e);
 
   // collect text selection
   var textSelect = "";
-  window.setTimeout(function() {
+  clearTimeout(timeout);
+  timeout = window.setTimeout(function() {
     textSelect = getSelectionText();
     if (textSelect.length > 0) {
       globalMatch(textSelect);
