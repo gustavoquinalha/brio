@@ -1,7 +1,26 @@
+.loading {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: #3949AB;
+  animation-name: loading;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes loading {
+  from {}
+  to {
+    height: 0;
+  }
+}
+
+
 .intro {
   min-height: 100vh;
   width: 100%;
-  /* background: url('../img/bg.jpg'); */
   background: #000;
   background-position: center center;
   background-size: cover;
@@ -16,7 +35,6 @@ a {
 
 .intro__content {
   min-height: 80vh;
-  /* background: yellow; */
 }
 
 .intro__img {
@@ -25,7 +43,6 @@ a {
 }
 
 .intro__text {
-  /* background: red; */
   min-height: 20vh;
 }
 
