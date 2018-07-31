@@ -1,0 +1,42 @@
+.intro {
+  min-height: 100vh;
+  width: 100%;
+  /* background: url('../img/bg.jpg'); */
+  background: #000;
+  background-position: center center;
+  background-size: cover;
+  color: #fff;
+  font-family: sans-serif;
+}
+
+a {
+  text-decoration: none;
+  transition: .3s;
+}
+
+.intro__content {
+  min-height: 80vh;
+  /* background: yellow; */
+}
+
+.intro__img {
+  width: 300px;
+  max-width: 90%;
+}
+
+.intro__text {
+  /* background: red; */
+  min-height: 20vh;
+}
+
+.link-item {
+  color: #fff;
+}
+
+.link-item:hover {
+  color: #3949AB;
+}
+
+.item-link_lg {
+  font-size: 2rem;
+}
