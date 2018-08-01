@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 
+//Regex pattern para identificar nomes em textos
+const rgNames = /([A-Z]+\w{3,12})+?(\s[A-Z]\w{3,12})?(\s[A-Z]\w{3,12})?(\s[A-Z]\w{3,12})/g;
+
+//Regex pattern para identificar CNPJS em textos
+const rgCNPJS = /(\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2})/g;
+
 var names = [
   'Jair Bolsonaro',
   'Ciro Gomes',
