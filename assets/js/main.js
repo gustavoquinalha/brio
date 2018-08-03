@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 });
 
+//Regex pattern para identificar nomes em textos
+const rgNames = /([A-Z]+\w{3,12})+?(\s[A-Z]\w{3,12})?(\s[A-Z]\w{3,12})?(\s[A-Z]\w{3,12})/g;
+
+//Regex pattern para identificar CNPJS em textos
+const rgCNPJS = /(\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2})/g;
+
 /**
  * Names dataset placeholder
  * 
@@ -26,6 +32,8 @@ var names = [
   'Bolsonaro',
   'Itamaraty'
 ]
+
+var dataBrasilIo = [];
 
 /**
  * @name    search: return all elements that contains the name
@@ -55,14 +63,102 @@ var search = function(node, name) {
 }
 
 /**
- * 
- * Apply popover in nodes returned from search
+ * @name    replaceToLinkData: Apply popover in nodes returned from search
+ *
+ * @params  name: String
+ *
+ * @return  undefined
  * 
  */
-names.forEach(name => {
+var replaceToLinkData = (name) => {
   search(document.body, name).forEach(el => {
-    el.innerHTML = el.innerHTML.replace(RegExp(name,'gi'),`<a href="#">${name}</a>`)
+    el.innerHTML = el.innerHTML.replace(RegExp(name, 'gi'), `<a href="#">${name}</a>`)
   })
+}
+
+names.forEach(name => {
+  replaceToLinkData(name)
+})
+
+var uniq = (acc, curr) => {
+  var found = acc.find(val => val === curr);
+
+  if (found) {
+    return acc;
+  }
+
+  return acc.concat([curr]);
+}
+
+var scanBody = function() {
+  var body = document.body.innerText;
+  var names = body.match(rgNames) || [];
+  var CNPJS = body.match(rgCNPJS) || [];
+
+  return {
+    names: names.reduce(uniq, []),
+    CNPJS: CNPJS.reduce(uniq, [])
+  };
+}
+
+var searchBrasilIo = (search) => {
+  return new Promise(resolve => {
+    if (!search) {
+      resolve([]);
+    }
+
+    fetch(`https://brasil.io/api/dataset/eleicoes-brasil/candidatos/data?format=json&search=${search}`, {
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": null,
+      "method": "GET",
+    })
+    .then(res => {
+      if (res.status !== 200) {
+        resolve("Request status: " + res.status + " - This doesn't look right...");
+      }
+
+      res.json().then(data => {
+        data.search = search;
+
+        resolve(data);
+      }).catch(err => {
+        console.log("ERR:: The fetch API request returned an error: " + err);
+        resolve(err);
+      });
+    }).catch(err => {
+      console.log("ERR:: The fetch API request returned an error: " + err);
+      resolve(err);
+    });
+  })
+}
+
+window.addEventListener("load", () => {
+  if (document.readyState === "complete") {
+    var result = scanBody();
+
+    if (result.names.length) {
+      var promises = result.names.map(name => {
+        return searchBrasilIo(name);
+      });
+
+      Promise.all(promises)
+        .then(res => {
+          // guarda os dados recebido da API
+          dataBrasilIo = res
+          .filter(data => data.results.length)
+            .map(data => {
+              return {name: data.search, results: data.results};
+            });
+
+          dataBrasilIo.forEach(data => {
+            replaceToLinkData(data.name)
+          });
+
+        })
+    }
+  }
 })
 
 /**
